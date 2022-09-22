@@ -77,7 +77,7 @@ void Renderer::imageCallback(const sensor_msgs::Image::ConstPtr& msg)
 
   // convert to BGR image
   if (msg->encoding == "rgb8") cv::cvtColor(cv_ptr->image, last_image_, CV_RGB2BGR);
-  if (msg->encoding == "mono8")
+  else if (msg->encoding == "mono8")
   {
     if (color_image_)
     {
@@ -87,6 +87,9 @@ void Renderer::imageCallback(const sensor_msgs::Image::ConstPtr& msg)
     {
       cv::cvtColor(cv_ptr->image, last_image_, CV_GRAY2BGR);
     }
+  }
+  else if (msg->encoding == "bgr8") {
+    cv_ptr->image.copyTo(last_image_);
   }
 
   if (!used_last_image_)
